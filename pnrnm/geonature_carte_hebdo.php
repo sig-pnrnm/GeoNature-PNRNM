@@ -44,12 +44,12 @@ var markers = L.markerClusterGroup();
 }
 
 var stylepnrnm = {
-        fillColor: 'green',
+        fillColor: 'white',
         opacity: 0.8,
         color: 'white',  //Outline color
         weight: 2,
         dashArray: "5 5",
-        fillOpacity: 0.1
+        fillOpacity: 0.3
 };
 
 function addPnrnmToMap(pnrnm, map) {
