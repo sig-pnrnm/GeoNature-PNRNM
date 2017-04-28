@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="markercluster/MarkerCluster.Default.css" />
 <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="Leaflet.snogylop/leaflet.snogylop.js"></script>
 <script src="markercluster/leaflet.markercluster-src.js"></script>
 </head>
 <body>
@@ -54,9 +55,7 @@ var stylepnrnm = {
 function addPnrnmToMap(pnrnm, map) {
 		var pnrnmlayer = L.geoJson(pnrnm, {
 			style: stylepnrnm,
-			onEachFeature: function (feature, layer) {
-            var popupText = feature.properties.nomzone;
-            layer.bindPopup(popupText); }
+			invert: true
 		});
 		map.addLayer(pnrnmlayer);
 }
