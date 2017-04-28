@@ -10,10 +10,10 @@
 $conn = new PDO('pgsql:host=localhost;dbname=geonaturedb','*****','*****');
 # Build SQL SELECT statement and return the geometry as a GeoJSON element
 $sql = "SELECT  bl.nom_liste,
-                'http://149.202.129.102/geonature/'|| bl.picto as urlpicto,
+                'http://XXX.XXX.XXX.XXX/geonature/'|| bl.picto as urlpicto,
                 tx.lb_nom as nom_la,
                 CASE WHEN tx.nom_vern IS NULL THEN null ELSE split_part(tx.nom_vern, ', ',1) END as nom_fr,
-                'http://149.202.129.102/atlas/espece/'||bn.cd_nom as urlespece,
+                'http://XXX.XXX.XXX.XXX/atlas/espece/'||bn.cd_nom as urlespece,
                 s.dateobs,
                 s.observateurs,
                 s.the_geom_2154,
