@@ -46,7 +46,7 @@ var markers = L.markerClusterGroup();
 var stylepnrnm = {
         fillColor: 'white',
         opacity: 0.8,
-        color: 'white',  //Outline color
+        color: "#999999",  //Outline color
         weight: 2,
         dashArray: "5 5",
         fillOpacity: 0.3
