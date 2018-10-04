@@ -5,9 +5,9 @@ suite à l'installation d'une VM vierge avec le script `install_all.sh`
 - [x] Changer le nom de l'application
 - [x] Modifier le texte d'accueil
 - [x] Modifier les logos
-- [ ] Récupérer les observateurs de GeoNature V1
-- [ ] Récupérer les observations de GeoNature V1
-- [ ] Récupérer les observateurs de SERENA
+- [ ] Récupérer les observateurs de GeoNature V1 (script de migration v1>V2 ?)
+- [ ] Récupérer les observations de GeoNature V1 (script de migration v1>V2 ?)
+- [ ] Récupérer les observateurs + observations + ... (?) de SERENA
 
 
 ## 1 # Nom de l'application
