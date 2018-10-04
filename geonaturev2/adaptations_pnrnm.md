@@ -78,8 +78,8 @@ Modification (ajout) :
   </p>
 ```
 
+Une fois les modifications terminées, lancer `npm run build` depuis le répertoire geonature/frontend
 
-refaire le "update configuration" comme dans 1#
 
 
 ## 3 # Customiser l'interface (logos)
@@ -87,9 +87,15 @@ refaire le "update configuration" comme dans 1#
 ça se passe là :
 
 ```html
-/home/geonatureadmin/geonature/frontend/dist/custom/images
-/home/geonatureadmin/geonature/frontend/dist/assets/images
+/home/geonatureadmin/geonature/frontend/src/custom/images
+/home/geonatureadmin/geonature/frontend/src/assets/images
 ```
+et non là :
+
+~~/home/geonatureadmin/geonature/frontend/dist/custom/images~~
+
+~~/home/geonatureadmin/geonature/frontend/dist/assets/images~~
+
 (logo_structure.png = 50 x 46 px)
 
 
