@@ -46,28 +46,23 @@ Modification (ajout) :
 
 
 /home/geonatureadmin/geonature/frontend/src/app/components/login/login.component.html
+
 ```html
 	<div id="loading_gnv2">
 	</div>
 ```
 
-/home/geonatureadmin/geonature/frontend/dist/custom/custom.scss
-
-```css
-	#loading_gnv2{
-	  position: absolute;
-	  left: 0;
-	  top: 0;
-	  width: 100%;
-	  height: 100%;
-	  z-index: 20000;
-	  background: url(custom/images/geonature_background.jpg) center 10% no-repeat #ecd9eb;
-	  background-size: 100%;
-	  display: flex;
-	  flex-direction: column;
-	  align-items: center;
-	  justify-content: center;
-	}
+Ecran de connexion (ajout d'un background) :
+/home/geonatureadmin/geonature/frontend/src/index.html
+```html
+<style type="text/css">body { 
+    margin:0;
+    padding:0;
+    background: url(assets/images/geonature_background.jpg) no-repeat center fixed; 
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover; /* version standardisée */
+  }
+</style>
 ```
 
 /home/geonatureadmin/geonature/frontend/src/app/components/sidenav-items/sidenav-items.component.html
