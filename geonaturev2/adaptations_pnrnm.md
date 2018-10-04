@@ -46,14 +46,14 @@ Modification (ajout) :
 
 
 /home/geonatureadmin/geonature/frontend/src/app/components/login/login.component.html
-```
+```html
 	<div id="loading_gnv2">
 	</div>
 ```
 
 /home/geonatureadmin/geonature/frontend/dist/custom/custom.scss
 
-```
+```css
 	#loading_gnv2{
 	  position: absolute;
 	  left: 0;
@@ -71,7 +71,7 @@ Modification (ajout) :
 ```
 
 /home/geonatureadmin/geonature/frontend/src/app/components/sidenav-items/sidenav-items.component.html
-```
+```html
   <p class="p-small">
     Hébergé et mis à disposition par le 
     <a target="_blank" href="http://www.parc-naturel-normandie-maine.fr"> PNR Normandie-Maine</a>
@@ -86,7 +86,7 @@ refaire le "update configuration" comme dans 1#
 
 ça se passe là :
 
-```
+```html
 /home/geonatureadmin/geonature/frontend/dist/custom/images
 /home/geonatureadmin/geonature/frontend/dist/assets/images
 ```
