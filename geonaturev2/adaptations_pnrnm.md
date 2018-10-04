@@ -45,13 +45,6 @@ Modification (ajout) :
 ```
 
 
-/home/geonatureadmin/geonature/frontend/src/app/components/login/login.component.html
-
-```html
-	<div id="loading_gnv2">
-	</div>
-```
-
 Ecran de connexion (ajout d'un background) :
 /home/geonatureadmin/geonature/frontend/src/index.html
 ```html
