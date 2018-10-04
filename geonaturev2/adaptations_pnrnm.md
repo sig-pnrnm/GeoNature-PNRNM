@@ -2,7 +2,7 @@
 suite à l'installation d'une VM vierge avec le script `install_all.sh`
 
 
-- [x] Changer le nom de l'application (cf. :  [1 # Nom de l'application](adaptations_pnrnm.md) )
+- [x] Changer le nom de l'application ([cf. : #1](adaptations_pnrnm.md#1--nom-de-lapplication) )
 - [x] Modifier le texte d'accueil
 - [x] Modifier les logos
 - [ ] Récupérer les observateurs de GeoNature V1 (script de migration v1>V2 ?)
