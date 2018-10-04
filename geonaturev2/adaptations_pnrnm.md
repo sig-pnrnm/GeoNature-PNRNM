@@ -1,4 +1,7 @@
-# 1 # Nom de l'application
+# Personnalisation de GeoNature v2 au PNR Normandie-Maine
+suite à l'installation d'une VM vierge avec le script `install_all.sh`
+
+## 1 # Nom de l'application
 
 Editer le fichier `/config/geonature_config.toml` en s'inspirant de `default_config.toml.example`
 Puis lancer les commandes suivantes, depuis `/home/geonatureadmin/geonature/backend`
@@ -11,7 +14,7 @@ deactivate
 (ça prend un peu de temps !)
 
 
-# 2 # Modifier texte d'accueil :
+## 2 # Modifier texte d'accueil :
 
 Ca se passe ici : `/home/geonatureadmin/geonature/frontend/src/custom/components/introduction/introduction.component.html`
 
@@ -72,7 +75,7 @@ Modification (ajout) :
 refaire le "update configuration" comme dans ## 1 #
 
 
-# 3 # Customiser l'interface (logos)
+## 3 # Customiser l'interface (logos)
 
 ça se passe là :
 `/home/geonatureadmin/geonature/frontend/dist/custom/images`
