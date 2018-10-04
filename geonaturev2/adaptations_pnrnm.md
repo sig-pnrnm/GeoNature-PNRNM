@@ -13,9 +13,7 @@ deactivate
 
 # 2 # Modifier texte d'accueil :
 
-(attention, il semble que des parenthèses ou autres caractères spéciaux fassent planter l'update_configuration
-
-`/home/geonatureadmin/geonature/frontend/src/custom/components/introduction/introduction.component.html`
+Ca se passe ici : `/home/geonatureadmin/geonature/frontend/src/custom/components/introduction/introduction.component.html`
 
 Modification (ajout) :
 ```
