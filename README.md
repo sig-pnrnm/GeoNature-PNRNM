@@ -6,4 +6,4 @@ Vade-mecum de procédures / ressources locales
 
 
 ### Personnalisation de la V2
-cf [ce document](adaptations_pnrnm.md#personnalisation-de-geonature-v2-au-pnr-normandie-maine)
+cf [ce document](geonaturev2/adaptations_pnrnm.md#personnalisation-de-geonature-v2-au-pnr-normandie-maine)
