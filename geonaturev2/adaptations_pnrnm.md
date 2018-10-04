@@ -3,7 +3,7 @@ suite à l'installation d'une VM vierge avec le script `install_all.sh`
 
 
 - [x] Changer le nom de l'application ([cf. : #1](adaptations_pnrnm.md#1--nom-de-lapplication) )
-- [x] Modifier le texte d'accueil ([cf. : #2](adaptations_pnrnm.md#2) )
+- [x] Modifier le texte d'accueil ([cf. : #2](adaptations_pnrnm.md#2--modifier-texte-daccueil-) )
 - [x] Modifier les logos
 - [ ] Créer une connexion (FDW) à la BDD de GeoNature v1
 - [ ] Récupérer les observateurs de GeoNature V1 (script de migration v1>V2 ?)
