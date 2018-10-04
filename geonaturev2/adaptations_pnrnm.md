@@ -59,7 +59,7 @@ Ecran de connexion (ajout d'un background) :
 ```
 /home/geonatureadmin/geonature/frontend/src/app/components/login/login.component.html
 ```html
-<h3 style="background-color: rgba(255, 255, 255, 0.5);"> GeoNature v2 - PNR Normandie-Maine </h3>
+<h3 style="background-color: rgba(255, 255, 255, 0.5); border-radius: 25px;"> GeoNature v2 - PNR Normandie-Maine </h3>
 ```
 /home/geonatureadmin/geonature/frontend/src/app/components/sidenav-items/sidenav-items.component.html
 ```html
