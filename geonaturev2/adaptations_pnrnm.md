@@ -69,17 +69,17 @@ Modification (ajout) :
 ```
 
 
-
-
-
-refaire le "update configuration" comme dans ## 1 #
+refaire le "update configuration" comme dans 1#
 
 
 ## 3 # Customiser l'interface (logos)
 
 ça se passe là :
-`/home/geonatureadmin/geonature/frontend/dist/custom/images`
-`/home/geonatureadmin/geonature/frontend/dist/assets/images`
+
+```
+/home/geonatureadmin/geonature/frontend/dist/custom/images
+/home/geonatureadmin/geonature/frontend/dist/assets/images
+```
 (logo_structure.png = 50 x 46 px)
 
 
