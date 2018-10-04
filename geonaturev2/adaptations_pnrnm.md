@@ -1,6 +1,15 @@
 # Personnalisation de GeoNature v2 au PNR Normandie-Maine
 suite à l'installation d'une VM vierge avec le script `install_all.sh`
 
+
+- [x] Changer le nom de l'application
+- [x] Modifier le texte d'accueil
+- [x] Modifier les logos
+- [ ] Récupérer les observateurs de GeoNature V1
+- [ ] Récupérer les observations de GeoNature V1
+- [ ] Récupérer les observateurs de SERENA
+
+
 ## 1 # Nom de l'application
 
 Editer le fichier `/config/geonature_config.toml` en s'inspirant de `default_config.toml.example`
@@ -19,7 +28,7 @@ deactivate
 Ca se passe ici : `/home/geonatureadmin/geonature/frontend/src/custom/components/introduction/introduction.component.html`
 
 Modification (ajout) :
-```
+```html
         <h2 class="underlined main-color"> Bienvenue dans GeoNature V2 </h2>
 
         <p>
