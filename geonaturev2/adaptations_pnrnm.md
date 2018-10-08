@@ -122,4 +122,21 @@ Pour la favicon :
 /home/geonatureadmin/geonature/frontend/src
 ```
 
+## X # Récupérer les observateurs
 
+
+### Les structures :
+l'UUID et l'ID sont générés automatiquement
+les ID correspondent à ceux de la V1 donc ce sera plus simple pour la suite
+
+```sql
+INSERT INTO
+utilisateurs.bib_organismes(nom_organisme,adresse_organisme,cp_organisme,ville_organisme,tel_organisme,fax_organisme,email_organisme)
+VALUES
+('Parc Normandie-Maine','Maison du Parc','61320','Carrouges','02 33 81 75 75','','info@parc-normandie-maine.fr'),
+('Association Faune et Flore de l''Orne','Moulin du Pont','61420','Saint-Denis-sur-Sarthon','02 33 26 26 62','','affo@wanadoo.fr'),
+('Groupe Ornithologique des Avaloirs','','','','','','contact.goa53@yahoo.fr'),
+('Conseil Départemental de l''Orne','Hôtel du Département\n27 boulevard de Strasbourg\nCS 30528','61017','Alençon Cedex','02 33 81 60 00','',''),
+('Conservatoire botanique national de Brest','52, allée du Bot','29200','Brest','02 98 41 88 95','','cbn.brest@cbnbrest.com');
+```
+(`\n` pour les retours à la ligne)
