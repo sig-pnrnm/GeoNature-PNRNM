@@ -2,7 +2,7 @@
 suite à l'installation d'une VM vierge avec le script `install_all.sh`
 
 
-- [x] Changer le nom de l'application ([cf. : #1](adaptations_pnrnm.md#1--nom-de-lapplication) )
+- [x] Changer le nom de l'application ([cf. : #1](adaptations_pnrnm.md#1--nom-de-lapplication-et-autres-paramètres) )
 - [x] Modifier le texte d'accueil ([cf. : #2](adaptations_pnrnm.md#2--modifier-texte-daccueil-) )
 - [x] Modifier les logos
 - [ ] Créer une connexion (FDW) à la BDD de GeoNature v1
@@ -11,9 +11,31 @@ suite à l'installation d'une VM vierge avec le script `install_all.sh`
 - [ ] Récupérer les observateurs + observations + ... (?) de SERENA
 
 
-## 1 # Nom de l'application
+## 1 # Nom de l'application et autres paramètres
 
 Editer le fichier `/config/geonature_config.toml` en s'inspirant de `default_config.toml.example`
+
+Dans le cas de l'instance Parc :
+```
+# GeoNature backend global configuration file
+# Don't change this
+
+# Database
+SQLALCHEMY_DATABASE_URI = "postgresql://geonatuser:xxxmotdepassexxxx@localhost:5432/geonaturedb"
+URL_APPLICATION = 'http://biodiversite.parc-naturel-normandie-maine.fr/geonature' 
+API_ENDPOINT = 'http://biodiversite.parc-naturel-normandie-maine.fr/geonature/api'
+API_TAXHUB = 'http://biodiversite.parc-naturel-normandie-maine.fr/taxhub/api'
+
+# Application
+appName = 'GeoNature 2 - Normandie-Maine'   
+SECRET_KEY = 'super secret key'
+
+LOCAL_SRID = '2154'
+
+DEFAULT_LANGUAGE='fr'
+```
+
+
 Puis lancer les commandes suivantes, depuis `/home/geonatureadmin/geonature/backend`
 ```
 source venv/bin/activate
@@ -45,23 +67,13 @@ Modification (ajout) :
 ```
 
 
-Ecran de connexion (ajout d'un background) :
-/home/geonatureadmin/geonature/frontend/src/index.html
-```html
-<style type="text/css">body { 
-    margin:0;
-    padding:0;
-    background: url(assets/images/geonature_background.jpg) no-repeat center fixed; 
-    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-    background-size: cover; /* version standardisée */
-  }
-</style>
-```
 /home/geonatureadmin/geonature/frontend/src/app/components/login/login.component.html
 ```html
       <h3 style="background-color: rgba(255, 255, 255, 0.5); border-radius: 25px;"> GeoNature v2</h3>
       <img src="assets/images/LogoGeonature.png" alt="GeoNature v2">
 ```
+
+
 /home/geonatureadmin/geonature/frontend/src/app/components/sidenav-items/sidenav-items.component.html
 ```html
   <p class="p-small">
@@ -76,7 +88,7 @@ Une fois les modifications terminées, lancer `npm run build` depuis le réperto
 
 ## 3 # Customiser l'interface (logos)
 
-ça se passe là :
+ça se passe là pour les logos :
 
 ```html
 /home/geonatureadmin/geonature/frontend/src/custom/images
@@ -88,6 +100,11 @@ et non là :
 
 ~~/home/geonatureadmin/geonature/frontend/dist/assets/images~~
 
+
 (logo_structure.png = 50 x 46 px)
 
 
+Pour la favicon :
+```html
+/home/geonatureadmin/geonature/frontend/src
+```
