@@ -5,7 +5,7 @@ suite à l'installation d'une VM vierge avec le script `install_all.sh`
 - [x] Changer le nom de l'application ([cf. : #1](adaptations_pnrnm.md#1--nom-de-lapplication-et-autres-paramètres) )
 - [x] Modifier le texte d'accueil ([cf. : #2](adaptations_pnrnm.md#2--modifier-texte-daccueil-) )
 - [x] Modifier les logos
-- [ ] Créer une connexion (FDW) à la BDD de GeoNature v1
+- [x] Connexion (FDW) à la BDD de GeoNature v1 ([cf. : #4](adaptations_pnrnm.md#4--connexion-fdw-à-geonature-v1) )
 - [ ] Récupérer les observateurs de GeoNature V1 (script de migration v1>V2 ?)
 - [ ] Récupérer les observations de GeoNature V1 (script de migration v1>V2 ?)
 - [ ] Récupérer les observateurs + observations + ... (?) de SERENA
@@ -122,6 +122,40 @@ Pour la favicon :
 /home/geonatureadmin/geonature/frontend/src
 ```
 
+
+## 4 # Connexion FDW à GeoNature v1
+
+Autoriser l'accès SSH entre les 2 VM.
+Editer le fichier `/etc/init.d/iptables` et ajouter `/sbin/iptables -A INPUT -s 149.202.129.107 -j ACCEPT` dans #Autorisation trafic locale
+Puis executer la commade `sudo /etc/init.d/iptables` (via putty en root)
+
+Créer un schéma `geonature_v1` dans `geonaturedb`
+```sql
+CREATE SCHEMA geonature_v1
+  AUTHORIZATION geonatuser;
+```
+
+Commandes à executer en tant qu'utilisateur Postgres (donc depuis putty avec PSQL)
+
+```sh
+sudo -u postgres psql -d geonaturedb -c "CREATE extension IF NOT EXISTS postgres_fdw;"
+sudo -u postgres psql -d geonaturedb -c "CREATE SERVER geonature_v1 FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '149.202.129.102', port '5432', dbname 'geonaturedb');"
+sudo -u postgres psql -d geonaturedb -c "CREATE USER MAPPING FOR geonatuser SERVER geonature_v1 OPTIONS (user 'geonatuser', password '********');"
+sudo -u postgres psql -d geonaturedb -c "GRANT ALL PRIVILEGES ON FOREIGN SERVER geonature_v1 TO geonatuser;"
+```
+
+Importer les `Foreign Table` nécessaires grâce à la nouvelle fonction (PG > 9.5) `IMPORT FOREIGN SCHEMA`
+Exemple avec 
+```sql
+IMPORT FOREIGN SCHEMA utilisateurs
+    FROM SERVER geonature_v1
+    INTO geonature_v1;
+
+IMPORT FOREIGN SCHEMA synthese
+    FROM SERVER geonature_v1
+    INTO geonature_v1;
+```
+
 ## X # Récupérer les observateurs
 
 
@@ -140,3 +174,4 @@ VALUES
 ('Conservatoire botanique national de Brest','52, allée du Bot','29200','Brest','02 98 41 88 95','','cbn.brest@cbnbrest.com');
 ```
 (`\n` pour les retours à la ligne)
+
