@@ -1,5 +1,6 @@
 # Personnalisation de GeoNature v2 au PNR Normandie-Maine
-suite à l'installation d'une VM vierge avec le script `install_all.sh`
+
+suite à l'installation d'une VM vierge avec le script `install_all.sh` ([Procédure](https://geonature.readthedocs.io/fr/latest/installation-all.html#installation-de-l-application) )
 
 
 - [x] Changer le nom de l'application ([cf. : #1](adaptations_pnrnm.md#1--nom-de-lapplication-et-autres-paramètres) )
@@ -126,7 +127,9 @@ Pour la favicon :
 ## 4 # Connexion FDW à GeoNature v1
 
 Autoriser l'accès SSH entre les 2 VM.
-Editer le fichier `/etc/init.d/iptables` et ajouter `/sbin/iptables -A INPUT -s 149.202.129.107 -j ACCEPT` dans #Autorisation trafic locale
+
+Editer le fichier `/etc/init.d/iptables` et ajouter `/sbin/iptables -A INPUT -s 149.202.129.107 -j ACCEPT` dans `#Autorisation trafic locale`.
+
 Puis executer la commade `sudo /etc/init.d/iptables` (via putty en root)
 
 Créer un schéma `geonature_v1` dans `geonaturedb`
@@ -156,12 +159,114 @@ IMPORT FOREIGN SCHEMA synthese
     INTO geonature_v1;
 ```
 
+## X # Récupérer les Taxons de la V1
+
+Récupération des Taxons de la V1 pour peupler les listes de saisie en V2.
+Adaptation du script proposé sur https://geonature.readthedocs.io/fr/latest/import-level-2.html
+
+```sql
+CREATE TABLE gn_imports.new_noms
+(
+  cd_nom integer NOT NULL,
+  cd_ref integer NOT NULL,
+  nom_fr character varying,
+  array_listes integer[],
+  CONSTRAINT new_noms_pkey PRIMARY KEY (cd_nom)
+);
+
+TRUNCATE TABLE gn_imports.new_noms;
+INSERT INTO gn_imports.new_noms
+SELECT DISTINCT
+  i.cd_nom,
+  t.cd_ref,
+  split_part(t.nom_vern, ',', 1),
+  array_agg(DISTINCT l.id_liste) AS array_listes
+FROM geonature_v1.syntheseff i
+LEFT JOIN taxonomie.taxref t ON t.cd_nom = i.cd_nom
+LEFT JOIN taxonomie.bib_listes l ON id_liste = 100
+WHERE i.cd_nom NOT IN (SELECT cd_nom FROM taxonomie.bib_noms)
+AND t.cd_ref IS NOT NULL
+GROUP BY i.cd_nom, t.cd_ref, nom_vern;
+
+SELECT setval('taxonomie.bib_noms_id_nom_seq', (SELECT max(id_nom) FROM taxonomie.bib_noms), true);
+INSERT INTO taxonomie.bib_noms(cd_nom, cd_ref, nom_francais)
+SELECT cd_nom, cd_ref, nom_fr FROM gn_imports.new_noms;
+
+INSERT INTO taxonomie.cor_nom_liste (id_liste, id_nom)
+SELECT unnest(array_listes) AS id_liste, n.id_nom
+FROM gn_imports.new_noms tnn
+JOIN taxonomie.bib_noms n ON n.cd_nom = tnn.cd_nom;
+
+DROP TABLE gn_imports.new_noms;
+```
+
+
 ## X # Récupérer les observateurs
 
 
 ### Les structures :
 l'UUID et l'ID sont générés automatiquement
 les ID correspondent à ceux de la V1 donc ce sera plus simple pour la suite
+
+
+Mise à jour des rôles existants :
+```sql
+UPDATE utilisateurs.t_roles
+   SET	nom_role='PNRNM_Equipe',
+	desc_role='Tous les agents en poste au PNRNM',
+	date_update=now()
+ WHERE nom_role='Grp_en_poste';
+
+UPDATE utilisateurs.t_roles
+   SET	prenom_role='PNRNM',
+	remarques='PNRNM',
+	date_update=now()
+ WHERE prenom_role='test';
+ 
+UPDATE utilisateurs.bib_unites
+   SET nom_unite='Equipe PNRNM'
+ WHERE nom_unite='Service scientifique';
+
+-- Import des utilisateurs V1
+INSERT INTO utilisateurs.t_roles(groupe,
+				identifiant,
+				nom_role,
+				prenom_role,
+				desc_role,
+				pass,
+				email,
+				id_organisme,
+				organisme,
+				id_unite,
+				remarques,
+				pn,
+				session_appli,
+				date_insert,
+				date_update)
+
+SELECT	FALSE::boolean as groupe,
+	identifiant,
+	nom_role,
+	prenom_role,
+	desc_role,
+	pass,
+	email,
+	id_organisme,
+	organisme,
+	1::integer as id_unite,
+	remarques,
+	TRUE::boolean as pn,
+	session_appli,
+	now()::timestamp without time zone as date_insert,
+	now()::timestamp without time zone as date_update
+  FROM geonature_v1.t_roles
+  WHERE id_organisme = 2;
+
+-- Ajout manuel, depuis Usershub, des agents au groupe "PNRNM_Equipe", puis du groupe "PNRNM_Equipe" à l'application "Occtax" (ToDo : le faire en SQL...)  avec droits "Rédacteur"
+
+```
+
+
 
 ```sql
 INSERT INTO
