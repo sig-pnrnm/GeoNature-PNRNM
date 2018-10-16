@@ -1,7 +1,11 @@
-# Importation dans GeoNature v1 de la base SERENA mutualisée entre le PNR Normandie-Maine, le PNR Perche, l'AFFO et le Département de l'Orne
+# Importation dans GeoNature v1 d'une base de données SERENA
+
+(base mutualisée entre le PNR Normandie-Maine, le PNR Perche, l'AFFO et le Département de l'Orne)
 
 Ce document de travail permet de visualiser les étapes d'une procédure d'importation dans GeoNature des données d'une base SERENA (Access).
+
 Ces étapes sont certainement optimisables (écrites il y a plusieurs années, avec un niveau balbutiant en SQL à l'époque).
+
 Si vous identifiez des optimisations, n'hésitez pas à les proposer (en PR ou en me contactant)
 
 ## Importation des bases Access de SERENA dans une base PostGreSQL
@@ -130,3 +134,18 @@ SELECT "OBSE_ID" , "OBSE_NOM", "OBSE_RELV_ID", "OBSE_OBSV_ID", "SRCE_COMPNOM_C",
 CREATE INDEX sidx_rnf_obse_geom_geom ON rnf_obse_geom USING gist (geom);
 
 ```
+
+
+### Transfert de la table des observations dans la BDD de GeoNature v1
+
+(à rédiger : via un DUMP SQL ou directement via PSQL)
+Création d'un schéma "SERENA dans geonaturedb"
+
+```sql
+CREATE SCHEMA serena_affo_pnr
+  AUTHORIZATION geonatuser;
+```
+
+### Intégration dans la Synthèse des données de la table "à plat"
+
+(à rédiger)
