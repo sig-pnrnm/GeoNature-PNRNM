@@ -132,16 +132,30 @@ Pour la favicon :
 chosir le type de sécurisation "Referer ou IP"
 et récupérer la clé IGN après avoir finalisé la commande
 
-Clé VM "Biodiversité" : `oasdnxc81wien8vrs194j0jt`
+Clé VM "Biodiversité" du PNRNM : `oasdnxc81wien8vrs194j0jt`
 
+### Récupérer une clé pour l'API MapBox
 
-Editer le ficher `/home/geonatureadmin/geonature/frontend/src/conf/map.config.ts`
+Connecté à MapBox, ça se passe ici : https://www.mapbox.com/account/access-tokens
+Token GeoNature V2 : `pk.eyJ1IjoicG5yLW5vcm1hbmRpZS1tYWluZSIsImEiOiJjam5idW02amEwMTJmM3FudmRjdDJqanJpIn0.UXJfuDjS8aLtDwXhyw5yOg`
+
+### Editer le fichier `map.config.ts`
+
+Le fichier se situe ici :  `/home/geonatureadmin/geonature/frontend/src/conf/map.config.ts`
 
 Ajout d'un layer OSM N&B :
 ```javascript
     {name: 'OpenStreetMap NB',
     layer: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     attribution: '&copy; OpenStreetMap -  &copy; CartoDB'
+    },
+	{name: 'Carte IGN',
+    layer: 'https://gpp3-wxs.ign.fr/oasdnxc81wien8vrs194j0jt/geoportail/wmts?LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS&EXCEPTIONS=text/xml&FORMAT=image/jpeg&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
+    attribution:  '&copy; <a href="http://www.ign.fr">IGN-F Geoportail</a>'
+    },
+	{name: 'OSM - MapBox',
+    layer: 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicG5yLW5vcm1hbmRpZS1tYWluZSIsImEiOiJjam5idW02amEwMTJmM3FudmRjdDJqanJpIn0.UXJfuDjS8aLtDwXhyw5yOg',
+    attribution:  '&copy; Contributeurs <a href="http://osm.org/copyright">OpenStreetMap</a> | &copy; MapBox'
     },
 ```
 
