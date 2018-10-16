@@ -148,4 +148,5 @@ CREATE SCHEMA serena_affo_pnr
 
 ### Intégration dans la Synthèse des données de la table "à plat"
 
-(à rédiger)
+La procédure a été faite à l'époque avec l'assistance du PN des Ecrins, qui a rédigé pour l'occasion un tutoriel d'importation de données existantes :
+https://geonature.readthedocs.io/fr/1.9.1/install_all/2016-12-exemple-deploiement-pnr.html#integration-des-donnees-existantes-dans-geonature
