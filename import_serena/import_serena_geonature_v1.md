@@ -44,7 +44,7 @@ SELECT	"SITE_ID",
   ORDER BY "SITE_ID";
 ```
 
-### Création d'une Vue Matérialisée (VM) des Sites
+### Création d'une Vue Matérialisée (VM) des Observations
 
 A partir de la VM des Sites, création d'une table `RNF_OBSE_GEOM` des observations géolocalisées (au site si pas de XY).
 Tous les champs de SERENA n'ont pas été conservés : seuls les champs principaux ont été gérés ici : une optimisation serait de récupérer tous les autres champs et de les mettre au format GeoNature.
