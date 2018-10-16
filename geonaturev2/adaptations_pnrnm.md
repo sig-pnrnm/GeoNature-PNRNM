@@ -7,7 +7,7 @@ suite à l'installation d'une VM vierge avec le script `install_all.sh` ([Procé
 - [x] Modifier le texte d'accueil ([cf. : #2](adaptations_pnrnm.md#2--modifier-texte-daccueil-) )
 - [x] Modifier les logos
 - [x] Connexion (FDW) à la BDD de GeoNature v1 ([cf. : #4](adaptations_pnrnm.md#4--connexion-fdw-à-geonature-v1) )
-- [ ] Récupérer les observateurs de GeoNature V1 (script de migration v1>V2 ?)
+- [x] Récupérer les observateurs de GeoNature V1 (script de migration v1>V2 ?)
 - [ ] Récupérer les observations de GeoNature V1 (script de migration v1>V2 ?)
 - [ ] Récupérer les observateurs + observations + ... (?) de SERENA
 
@@ -124,6 +124,28 @@ Pour la favicon :
 ```
 
 
+## X # Customiser les fonds de cartes
+
+### Récupérer une clé IGN pour le serveur
+
+ça se passe ici : http://professionnels.ign.fr/ign/contrats
+chosir le type de sécurisation "Referer ou IP"
+et récupérer la clé IGN après avoir finalisé la commande
+
+Clé VM "Biodiversité" : `oasdnxc81wien8vrs194j0jt`
+
+
+Editer le ficher `/home/geonatureadmin/geonature/frontend/src/conf/map.config.ts`
+
+Ajout d'un layer OSM N&B :
+```javascript
+    {name: 'OpenStreetMap NB',
+    layer: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+    attribution: '&copy; OpenStreetMap -  &copy; CartoDB'
+    },
+```
+
+
 ## 4 # Connexion FDW à GeoNature v1
 
 Autoriser l'accès SSH entre les 2 VM.
@@ -206,7 +228,25 @@ DROP TABLE gn_imports.new_noms;
 
 ### Les structures :
 l'UUID et l'ID sont générés automatiquement
-les ID correspondent à ceux de la V1 donc ce sera plus simple pour la suite
+
+Création des structures :
+
+
+```sql
+INSERT INTO
+utilisateurs.bib_organismes(nom_organisme,adresse_organisme,cp_organisme,ville_organisme,tel_organisme,fax_organisme,email_organisme)
+VALUES
+('PNR Normandie-Maine','Maison du Parc','61320','Carrouges','02 33 81 75 75','','info@parc-normandie-maine.fr'),
+('Association Faune et Flore de l''Orne','Moulin du Pont','61420','Saint-Denis-sur-Sarthon','02 33 26 26 62','','affo@wanadoo.fr'),
+('Groupe Ornithologique des Avaloirs','','','','','','contact.goa53@yahoo.fr'),
+('Conseil Départemental de l''Orne','Hôtel du Département\n27 boulevard de Strasbourg\nCS 30528','61017','Alençon Cedex','02 33 81 60 00','',''),
+('Conservatoire botanique national de Brest','52, allée du Bot','29200','Brest','02 98 41 88 95','','cbn.brest@cbnbrest.com'),
+('PNR du Perche','Maison du Parc\nCourboyer','61340','Nocé','02 33 25 70 10','','secretariat@parc-naturel-perche.fr'),
+('PNR des Boucles de la Seine-Normande','692 rue du petit pont','76940','Notre-Dame-de-Bliquetuit','02 35 37 23 16','','contact@pnr-seine-normandie.com'),
+('PNR des Marais du Cotentin et du Bessin','3 Village des Ponts Douve','50500','Carentan','02 33 71 65 30','','info@parc-cotentin-bessin.fr');
+```
+(NB1 : `\n` pour les retours à la ligne)
+(NB2 : les ID correspondent à ceux de la V1 donc ce sera plus simple pour la suite : ne pas changer l'ordre !)
 
 
 Mise à jour des rôles existants :
@@ -254,29 +294,220 @@ SELECT	FALSE::boolean as groupe,
 	id_organisme,
 	organisme,
 	1::integer as id_unite,
-	remarques,
+	remarques || ' (compte récupéré de GeoNature v1)' as remarques,
 	TRUE::boolean as pn,
 	session_appli,
 	now()::timestamp without time zone as date_insert,
 	now()::timestamp without time zone as date_update
   FROM geonature_v1.t_roles
-  WHERE id_organisme = 2;
-
+  WHERE id_organisme = 2
+  AND nom_role NOT IN ('Administrateurs PNR NM','Stagiaires','Administrateur', 'Agents-PNR-NM', 'Agent');
+  
 -- Ajout manuel, depuis Usershub, des agents au groupe "PNRNM_Equipe", puis du groupe "PNRNM_Equipe" à l'application "Occtax" (ToDo : le faire en SQL...)  avec droits "Rédacteur"
 
 ```
 
+Suppression du menu "Admin" pour les membres de PNRNM_Equipe
+```sql
+INSERT INTO utilisateurs.cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role)
+VALUES (
+12, -- read
+20, -- nothing
+4, -- admin (Application backoffice de GeoNature)
+7 -- PNRNM_Equipe (ex groupe EN POSTE)
+);
+```
 
+### Les cadres d'acquisition / Jeux de données
+
+Suppression du jeu de données ATBI de la réserve intégrale du Lauvitel dans le Parc national des Ecrins
+```sql
+-- Suppression du jeu de données ATBI de la réserve intégrale du Lauvitel dans le Parc national des Ecrins
+
+DELETE FROM gn_meta.cor_dataset_actor
+ WHERE id_dataset = 2;
+
+DELETE FROM gn_meta.cor_dataset_territory
+ WHERE id_dataset = 2;
+
+DELETE FROM gn_meta.cor_dataset_protocol
+ WHERE id_dataset = 2;
+ 
+
+DELETE FROM gn_meta.t_datasets
+ WHERE dataset_name = 'ATBI de la réserve intégrale du Lauvitel dans le Parc national des Ecrins';
+```
+
+
+
+
+
+
+Création via le module d'administration de GeoNature (ToDo : à faire en SQL ?)
+
+Adaptation de la requête proposée par @donovanmaillard :
 
 ```sql
-INSERT INTO
-utilisateurs.bib_organismes(nom_organisme,adresse_organisme,cp_organisme,ville_organisme,tel_organisme,fax_organisme,email_organisme)
+-- Création d'un Cadre général (parent) "ABC"
+INSERT INTO gn_meta.t_acquisition_frameworks (
+acquisition_framework_name,
+acquisition_framework_desc,
+id_nomenclature_territorial_level,
+territory_desc,
+keywords,
+id_nomenclature_financing_type,
+target_description,
+acquisition_framework_start_date,
+is_parent
+)
 VALUES
-('Parc Normandie-Maine','Maison du Parc','61320','Carrouges','02 33 81 75 75','','info@parc-normandie-maine.fr'),
-('Association Faune et Flore de l''Orne','Moulin du Pont','61420','Saint-Denis-sur-Sarthon','02 33 26 26 62','','affo@wanadoo.fr'),
-('Groupe Ornithologique des Avaloirs','','','','','','contact.goa53@yahoo.fr'),
-('Conseil Départemental de l''Orne','Hôtel du Département\n27 boulevard de Strasbourg\nCS 30528','61017','Alençon Cedex','02 33 81 60 00','',''),
-('Conservatoire botanique national de Brest','52, allée du Bot','29200','Brest','02 98 41 88 95','','cbn.brest@cbnbrest.com');
+('Atlas Biodiversite Communale',
+'Données acquise dans le Cadre d''un ABC',
+'359',
+'Etudes à l''échelle communale de communes de France Métropolitaine',
+'ABC, Atlas de la Biodiversité Communale',
+'390',
+'',
+'01/01/2018',
+'1')
+
+
+-- Création d'un cadre enfant "ABC Andaine Passais"
+INSERT INTO gn_meta.t_acquisition_frameworks (
+acquisition_framework_name,
+acquisition_framework_desc,
+id_nomenclature_territorial_level,
+territory_desc,
+keywords,
+id_nomenclature_financing_type,
+target_description,
+acquisition_framework_start_date,
+is_parent,
+acquisition_framework_parent_id
+)
+VALUES
+('ABC Andaine Passais',
+'Données acquises dans le cadre de l''ABC Andaine Passais',
+'359',
+'Etudes à l''échelle communale de communes de France Métropolitaine',
+'ABC, Atlas de la Biodiversité Communale, Andaine, Passais, Communauté de Communes',
+'390',
+'Données acquises dans le cadre de l''ABC Andaine Passais',
+'01/01/2018',
+'0',
+'4')
+
+-- Création d'un cadre "Données personnelles des agents du Parc Normandie-Maine"
+INSERT INTO gn_meta.t_acquisition_frameworks (
+acquisition_framework_name,
+acquisition_framework_desc,
+id_nomenclature_territorial_level,
+territory_desc,
+keywords,
+id_nomenclature_financing_type,
+target_description,
+acquisition_framework_start_date,
+is_parent
+)
+VALUES
+('Données personnelles des agents du Parc Normandie-Maine',
+'Données personnelles des agents du Parc Normandie-Maine',
+'359',
+'Etudes à l''échelle communale de communes de France Métropolitaine',
+'Données personnelles, agents',
+'390',
+'Données personnelles des agents du Parc Normandie-Maine',
+'01/01/2018',
+'0')
+
+
+-- Création d'un jeu de données pour l'ABC Andaine Passais
+INSERT INTO gn_meta.t_datasets (
+id_acquisition_framework,
+dataset_name,
+dataset_shortname,
+dataset_desc,
+id_nomenclature_data_type,
+keywords,
+marine_domain,
+terrestrial_domain,
+id_nomenclature_dataset_objectif,
+id_nomenclature_collecting_method,
+id_nomenclature_data_origin,
+id_nomenclature_source_status,
+id_nomenclature_resource_type,
+default_validity
+)
+VALUES
+('5',
+'ABC Andaine Passais - Objectif Nature',
+'ABC Andaine Passais - Objectif Nature',
+'Données acquises dans le cadre de l''ABC Andaine Passais',
+'326',
+'ABC, Atlas de la Biodiversité Communale, Andaine, Passais',
+'FALSE',
+'TRUE',
+'425',
+'403',
+'78',
+'75',
+'324',
+'TRUE')
+
+-- Création d'un jeu de données "Données personnelles des agents"
+INSERT INTO gn_meta.t_datasets (
+id_acquisition_framework,
+dataset_name,
+dataset_shortname,
+dataset_desc,
+id_nomenclature_data_type,
+keywords,
+marine_domain,
+terrestrial_domain,
+id_nomenclature_dataset_objectif,
+id_nomenclature_collecting_method,
+id_nomenclature_data_origin,
+id_nomenclature_source_status,
+id_nomenclature_resource_type,
+default_validity
+)
+VALUES
+('6', -- cadre "Données personnelles des agents"
+'Données personnelles des agents du Parc Normandie-Maine',
+'Données personnelles des agents du Parc Normandie-Maine',
+'Données acquises par les agents sur leur temps personnel',
+'326',
+'Données personnelles',
+'FALSE',
+'TRUE',
+'425',
+'403',
+'78',
+'75',
+'324',
+'TRUE')
+
+
+-- Renseignement acteurs dans les métadonnées 
+-- Accordé à tout le groupe PNRNM_Equipe (id_role='7')
+INSERT INTO gn_meta.cor_dataset_actor (
+id_dataset, -- 3 pour le jeu ABC Andaine Passais - Objectif Nature
+id_role, -- 7 pour PNRNM_Equipe
+id_organism, -- 2 pour Parc Normandie-Maine
+id_nomenclature_actor_role -- 371 pour 'Producteur du jeu de données'
+)
+VALUES
+('3','7','2','371')
+
+
+INSERT INTO gn_meta.cor_dataset_actor (
+id_dataset, -- 4 pour le jeu "Données personnelles des agents"
+id_role, -- 7 pour PNRNM_Equipe
+id_organism, -- 2 pour Parc Normandie-Maine
+id_nomenclature_actor_role -- 371 pour 'Producteur du jeu de données'
+)
+VALUES
+('4','7','2','371')
+
 ```
-(`\n` pour les retours à la ligne)
 
