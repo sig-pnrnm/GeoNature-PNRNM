@@ -6,12 +6,12 @@ La connexion entre les 2 bases de données PostGreSQL va utiliser les Foreign Da
 
 ## Création, dans la base de données GeoNature, d'un utilisateur ODIN
 
-(commande psql à executer depuis putty avec l'utilisateur root)
+(commande psql à executer depuis putty avec l'utilisateur geonatureadmin)
 
 ```shell
-su - postgres
+sudo su postgres
 ```
-on est alors en postgres@debian
+on est alors en postgres@geonature2
 
 ```sql
 psql -c "CREATE USER odin WITH PASSWORD '***motdepasse***' "
