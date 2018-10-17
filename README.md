@@ -12,3 +12,6 @@ cf [ce document](geonaturev2/adaptations_pnrnm.md#personnalisation-de-geonature-
 [GeoNature v1](/import_serena/import_serena_geonature_v1.md)
 
 GeoNature v2 (à venir)
+
+### Connexion GeoNature 2 à ODIN
+[Procédure](/odin/connexion_geonature_odin.md)
