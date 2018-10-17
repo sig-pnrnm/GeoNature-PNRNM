@@ -24,7 +24,9 @@ depuis PgAdmin (connecté en tant que "geonatuser")
 ```sql
 CREATE SCHEMA partenaires ;
 GRANT USAGE ON SCHEMA partenaires TO odin;
-GRANT SELECT ON ALL TABLES IN SCHEMA partenaires TO odin; -- ne marche pas pour les vues ???
+
+-- création d'une vue matérialisée (VM) 'synthese_pnrnm_odin' depuis la synthèse de GeoNature (à faire !!!)
+
 GRANT SELECT ON partenaires.synthese_pnrnm_odin TO odin;
 ```
 
@@ -40,12 +42,12 @@ CREATE SERVER geonature_pnrnm
         FOREIGN DATA WRAPPER postgres_fdw
         OPTIONS (host 'XXX.XXX.XXX.XXX', port '5432', dbname 'geonaturedb');
 
-CREATE USER MAPPING FOR local_user
+CREATE USER MAPPING FOR local_user -- à remplacer par le user sur le serveur Odin
         SERVER geonature_pnrnm
         OPTIONS (user 'odin', password '***motdepasse***');
 
-CREATE FOREIGN TABLE synthese_pnrnm_orbpdl (--définition de la table à faire ! (ToDo !)
+CREATE FOREIGN TABLE synthese_pnrnm_odin (--définition de la table à faire ! (ToDo !)
 											)
         SERVER geonature_pnrnm
-        OPTIONS (schema_name 'partenaires', table_name 'synthese_pnrnm_orbpdl');
+        OPTIONS (schema_name 'partenaires', table_name 'synthese_pnrnm_odin');
 ```
