@@ -5,6 +5,8 @@
 
 Le territoire du Parc est complété par les 14 villes-portes adhérentes à la Charte.
 
+[![Interface Diachronique](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)
+
 Postérieurement à l'installation initiale (décembre 2016) le JSON du territoire (`/home/geonatureadmin/atlas/static/custom/territoire.json`) est modifié en ajoutant les villes portes.
 (il aurait été préférable de gérer initialement le territoire à l'installation de GeoNature-Atlas)
 
@@ -37,7 +39,7 @@ htmlLegend = 	"<p><i style='border: solid 1px red; width: 30px;'> &nbsp; &nbsp; 
 				"<p><i style='border:2px dashed #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Villes Portes </span></p>";
 ```
 
-- dans toues les autres :
+- dans tous les autres :
 ```javascript
 htmlLegend =	"<p><i style='border:3px solid #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Périmètre du Parc Normandie-Maine </span></p>" +
 				"<p><i style='border:2px dashed #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Villes Portes </span></p>";
