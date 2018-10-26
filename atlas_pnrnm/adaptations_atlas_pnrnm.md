@@ -5,7 +5,7 @@
 
 Le territoire du Parc est complété par les 14 villes-portes adhérentes à la Charte.
 
-[![Interface Diachronique](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)
+[![Atlas Parc Normandie-Maine](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)
 
 Postérieurement à l'installation initiale (décembre 2016) le JSON du territoire (`/home/geonatureadmin/atlas/static/custom/territoire.json`) est modifié en ajoutant les villes portes.
 (il aurait été préférable de gérer initialement le territoire à l'installation de GeoNature-Atlas)
@@ -28,18 +28,37 @@ style: function(feature) {
 	 }
 ```
 
+(ToDo : adapter ce styles aux nouveaux paramètres `configuration.MAP.BORDERS_COLOR` et `configuration.MAP.BORDERS_WEIGHT`)
+
 ### Ajouter une légende
 
 Modification du contenu de la variable `htmlLegend` dans les fichiers `static/mapMailles.js`, `static/mapCommune.js`, `static/mapPoint.js`, `static/mapSwitcher.js` et `static/mapHome.js` 
 
 - Dans `mapHome.js` :
+
 ```javascript
-htmlLegend = 	"<p><i style='border: solid 1px red; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Maille comportant au moins une observation </span></p>" +
+htmlLegend =	"<p><i style='border: solid 1px red; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Maille comportant au moins une observation </span></p>" +
 				"<p><i style='border:3px solid #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Périmètre du Parc Normandie-Maine </span></p>" +
 				"<p><i style='border:2px dashed #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Villes Portes </span></p>";
 ```
 
+- Dans `mapCommune.js` :
+
+```javascript
+	htmlLegendMaille = "<p><i style='border: solid 1px red;'> &nbsp; &nbsp; &nbsp;</i> Maille comportant au moins une observation</p>" +
+						"<p><i style='border-style: dotted;'> &nbsp; &nbsp; &nbsp;</i> Limite de la commune</p>"+
+						"<p><i style='border:3px solid #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Périmètre du Parc Normandie-Maine </span></p>" +
+						"<p><i style='border:2px dashed #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Villes Portes </span></p>";
+
+						
+						
+	htmlLegendPoint = "<p><i style='border-style: dotted;'> &nbsp; &nbsp; &nbsp;</i> Limite de la commune</p>"+
+						"<p><i style='border:3px solid #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Périmètre du Parc Normandie-Maine </span></p>" +
+						"<p><i style='border:2px dashed #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Villes Portes </span></p>";
+```
+
 - dans tous les autres :
+
 ```javascript
 htmlLegend =	"<p><i style='border:3px solid #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Périmètre du Parc Normandie-Maine </span></p>" +
 				"<p><i style='border:2px dashed #3388ff; width: 30px;'> &nbsp; &nbsp; &nbsp;</i> <span> Villes Portes </span></p>";
