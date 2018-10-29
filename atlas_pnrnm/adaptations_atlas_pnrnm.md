@@ -68,3 +68,89 @@ htmlLegend =	"<p><i style='border:3px solid #3388ff; width: 30px;'> &nbsp; &nbsp
 
 ( A FAIRE ! )
 
+## Masquer l'onglet "Synonymes"
+
+Cet onglet est considéré comme trop scientifique pour le public visé (grand public / élus).
+
+Pour le supprimer, les rubriques concernées du templace `/home/geonatureadmin/atlas/templates/ficheEspece.html` sont simplement passées en commentaires :
+
+```html
+<!-- [...] -->
+					<!--  Menu Synonyme non affiché
+                    <li><a data-toggle="tab" href="#synonymes">Synonymes</a></li>
+					-->
+<!-- [...] -->
+						<!--  Menu Synonyme non affiché
+                        <div id="synonymes" class="tab-pane fade">
+                            {% if synonyme | length == 1 %}
+                                Aucun synonyme pour ce taxon
+                            {% else %}
+                                {% for syn in synonyme %} 
+                                    {% if not syn.lb_nom == taxon.taxonSearch.lb_nom %}
+                                    {{ syn.nom_complet_html | safe}}
+                                    {% endif %}
+                                    {% if ( (not loop.last) and (not syn.lb_nom == taxon.taxonSearch.lb_nom) ) %}
+                                    |
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+						-->
+<!-- [...] -->
+```
+
+## Ajout d'éléments dans l'onglet "Répartition"
+
+La phrase "aucune info" est supprimée quand la chorologie locale n'est pas renseignée.
+On ajoute les liens vers les portails régionaux et la carte de l'INPN.
+
+To Do : centrer le logo INPN sous "France métropolitaine"
+
+```html
+                        <div id="chorologie" class="tab-pane fade">                                
+                                {% if taxonDescription.chorologie == None %}
+                                {% else %}
+                                    {{taxonDescription.chorologie}}
+                                {% endif %}
+								<br>
+
+								<table style="text-align: center; width:100%; ">
+								  <tbody>
+									<tr>
+									  <td><h4 class="text-center">Normandie</h4></td>
+									  <td><h4 class="text-center">Pays-de-la-Loire</h4></td>
+									</tr>
+									<tr>
+									  <td>
+										<a class="btn btn-lg px-3 btn-default" href="https://odin.normandie.fr/odin/#/taxonomy/view?taxonID={{taxon.taxonSearch.cd_ref}}" role="button" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur ODIN" data-placement="bottom">ODIN <img src="https://odin.normandie.fr/odin/img/odin_logo.png" height="30" alt="ODIN">
+										</a>
+									  </td>
+									  <td>
+										<a class="btn btn-lg px-3 btn-default" href="http://79.137.82.197/espece/{{taxon.taxonSearch.cd_ref}}" role="button" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur Biodiv'Pays-de-la-Loire" data-placement="bottom">Biodiv'PDL <img src="http://79.137.82.197/static/custom/images/logo-structure.png" height="30" alt="Biodiv'PDL">
+										</a>
+									  </td>
+									</tr>
+								  </tbody>
+								</table>
+								
+								<div class="panel-body">
+								   
+									<h4 class="text-center">France métropolitaine</h4>
+
+										<div id="inpnLink">
+										
+											<a class="btn btn-lg px-3 btn-default" href="https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}" role="button" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur l'INPN" data-placement="bottom"><img src="{{url_for('static', filename='images/logo_inpn.png') }}" height="30" alt="INPN">
+											</a>
+										
+										</div>
+							   
+										<object data="https://inpn.mnhn.fr/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93" type="image/svg+xml" width="90%" height="90%">
+											<param name="src" value="/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93">
+											<param name="type" value="image/svg+xml">
+											<param name="pluginspage" value="http://www.adobe.com/svg/viewer/install/">
+										</object>
+										<p class="small text-justify" style="color:#b1b1b1;">Cartographie issue de l'<a href='https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}' target="_blank" style="color:#7785ce;">INPN</a> - Avertissement : les données visualisables reflètent l'état d'avancement des connaissances et/ou la disponibilité des données existantes au niveau national : elles ne peuvent en aucun cas être considérées comme exhaustives.</p>
+
+								 </div>
+                        </div>
+```
