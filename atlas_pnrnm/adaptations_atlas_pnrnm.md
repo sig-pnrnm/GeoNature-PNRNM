@@ -215,7 +215,8 @@ Cela se configure dans le fichier `/home/geonatureadmin/atlas/main/configuration
 
 # exemple RANG_STAT = [{'ordre': ['Lepidoptera']}, {'classe': ['Insecta', 'Arachnida']}]
 #         RANG_STAT_FR ['Papillon', 'Insecte et Araignées']
-```shell
+```
+
 - version à 3 rangs : (`Faune, Flore et Champignons`)
 ```shell
 AFFICHAGE_RANG_STAT = True
