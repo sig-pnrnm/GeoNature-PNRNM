@@ -154,3 +154,82 @@ To Do : centrer le logo INPN sous "France métropolitaine"
 								 </div>
                         </div>
 ```
+
+
+
+## Modification du nombre d'observations affichées sur la page d'acceuil
+
+Le choix a été porté à 30 jours.
+Cela se configure dans le fichier `/home/geonatureadmin/atlas/main/configuration/config.py`, au niveau de ces lignes :
+```shell
+# Carte de la page d'accueil: observations des 'x' derniers jours. Bien mettre en anglais et non accordé
+NB_DAY_LAST_OBS = '30 day'
+# Texte à afficher pour décrire la cartographie des 'dernières observations'
+TEXT_LAST_OBS = u'Observations ces 30 derniers jours : '
+```
+
+Redémarrage du serveur pour prise en compte des modification (commande `reboot`)
+(NB : vérifier s'il n'y aurait pas plus rapide / moins brutal ?)
+
+
+## Statistiques par rangs taxonomiques
+
+Plutôt que `Faune invertébrée, Faune vertébrée et Flore`, il est demandé d'afficher les statistiques pour `Faune, Flore et Champignons`
+Comme nous pensions que le bloc était limité à 3 rangs, il est proposé aussi une version à 4 rangs taxonomiques : `Faune vertébrée, Faune invertébrée, Flore et Champignons`
+
+### Vérification des données présentes en base
+
+Requête SQL dans la base GeoNatureAtlas :
+```sql
+SELECT	regne, string_agg(distinct phylum, ',') as phylums,
+	count(distinct o.cd_ref) as nb_sps_atlas
+FROM	taxonomie.taxref t
+JOIN	atlas.vm_observations o ON t.cd_ref = o.cd_ref
+GROUP BY regne
+ORDER BY regne;
+```
+
+Résultat :
+```csv
+"regne";"phylums";"nb_sps_atlas"
+"Animalia";"Annelida,Arthropoda,Chordata,Mollusca,Nematoda";2902
+"Bacteria";"Cyanobacteria";1
+"Chromista";"Ochrophyta";2
+"Fungi";"Ascomycota,Basidiomycota";1287
+"Plantae";"Charophyta,Chlorophyta,Rhodophyta";1855
+"Protozoa";"Myxomycota";4
+```
+
+Les 7 espèces de bactéries, chromistes et protozoaïres peuvent être exclues ou ajoutées à "Faune" (au Pôle Pat Nat de décider)
+
+### Adaptation en conséquence du fichier de configuration
+
+Cela se configure dans le fichier `/home/geonatureadmin/atlas/main/configuration/config.py`, au niveau de ces lignes :
+
+- Explications :
+```shell
+## BLOC STAT PAR RANG : Parametre pour le bloc statistique 2 de la page d'accueil (statistiques par rang remontant 2 espèces aléatoirement ayant au moins une photo)
+# Ce bloc peut être affiché ou non et peut être affiché sur 2, 3 ou 4 colonnes. Il est ainsi possible de mettre autant de blocs que souhaité (2, 3, 4, 6, 8...)
+# Mettre dans RANG_STAT le couple 'rang taxonomique' - 'nom du taxon correspondant au rang' pour avoir des statistique sur ce rang -
+# Fonctionne à tous les niveaux de rang présents dans la table taxref -
+
+# exemple RANG_STAT = [{'ordre': ['Lepidoptera']}, {'classe': ['Insecta', 'Arachnida']}]
+#         RANG_STAT_FR ['Papillon', 'Insecte et Araignées']
+```shell
+- version à 3 rangs : (`Faune, Flore et Champignons`)
+```shell
+AFFICHAGE_RANG_STAT = True
+COLONNES_RANG_STAT = 3
+RANG_STAT = [{'regne': ["Animalia"]}, {'regne': ["Plantae"]}, {'regne': ["Fungi"]}] 
+RANG_STAT_FR = ['Faune', 'Flore', 'Champignons']
+```
+
+- version à 4 rangs : (`Faune vertébrée, Faune invertébrée, Flore et Champignons`)
+```shell
+AFFICHAGE_RANG_STAT = True
+COLONNES_RANG_STAT = 4
+RANG_STAT = [{'phylum': ["Chordata"]}, {'phylum': ["Arthropoda", "Mollusca", "Annelida", "Nematoda"]}, {'regne': ["Plantae"]}, {'regne': ["Fungi"]}]
+RANG_STAT_FR = ['Faune vertébrée', 'Faune invertébrée', 'Flore', 'Champignons']
+```
+
+ToDo : ajouter les captures d'écran !
