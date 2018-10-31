@@ -254,18 +254,19 @@ RANG_STAT_FR = ['Faune vertébrée', 'Faune invertébrée', 'Flore', 'Champignon
 ![Stats 4 rangs](img/stats_4_rangs_geonature-atlas.png)
 
 
-# 6 Adaptation du moteur de recherche : afficher nom français en premier
+## 6 Adaptation du moteur de recherche : afficher nom français en premier
 
 Voici cette discussion sur Github : https://github.com/PnEcrins/GeoNature-atlas/issues/167
 
 En attendant les évolution plus poussées liées à GeoNature V2, une adaptation de la vue SQL gérérant le moteur de recherche est faite :
 
-Avant :
-![avant](img/recherche_busard_pnrnm_v0.png)
-Après (v1)
-![après](img/recherche_busard_pnrnm_ok.png)
-Après (v2)
-![après](img/recherche_busard_pnrnm_ok2.png)
+### Propositions
+Avant | Après (prop. 1) | Après (prop. 1)
+------------ | ------------- | -------------
+![avant](img/recherche_busard_pnrnm_v0.png) | ![après](img/recherche_busard_pnrnm_ok.png) | ![après](img/recherche_busard_pnrnm_ok2.png)
+
+
+### Mise en place (SQL)
 
 Après avoir executé `DROP MATERIALIZED VIEW atlas.vm_search_taxon;`, relancer la création de la vue avec ce code adapté :
 
