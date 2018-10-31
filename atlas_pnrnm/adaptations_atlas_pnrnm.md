@@ -5,6 +5,8 @@
 
 Le territoire du Parc est complété par les 14 villes-portes adhérentes à la Charte.
 
+.. image :: docs/images/geonature-atlas-schema-02.jpg
+
 [![Atlas Parc Normandie-Maine](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)](https://raw.githubusercontent.com/sig-pnrnm/GeoNature-PNRNM/master/atlas_pnrnm/map_atlas_pnrnm.png)
 
 Postérieurement à l'installation initiale (décembre 2016) le JSON du territoire (`/home/geonatureadmin/atlas/static/custom/territoire.json`) est modifié en ajoutant les villes portes.
@@ -225,6 +227,8 @@ RANG_STAT = [{'regne': ["Animalia"]}, {'regne': ["Plantae"]}, {'regne': ["Fungi"
 RANG_STAT_FR = ['Faune', 'Flore', 'Champignons']
 ```
 
+[![Stats 3 rangs](img/stats_3_rangs_geonature-atlas.png)
+
 - version à 4 rangs : (`Faune vertébrée, Faune invertébrée, Flore et Champignons`)
 ```shell
 AFFICHAGE_RANG_STAT = True
@@ -233,4 +237,61 @@ RANG_STAT = [{'phylum': ["Chordata"]}, {'phylum': ["Arthropoda", "Mollusca", "An
 RANG_STAT_FR = ['Faune vertébrée', 'Faune invertébrée', 'Flore', 'Champignons']
 ```
 
-ToDo : ajouter les captures d'écran !
+[![Stats 4 rangs](img/stats_4_rangs_geonature-atlas.png)
+
+
+
+### Adaptation du moteur de recherche : afficher nom français en premier
+
+Voici cette discussion sur Github : https://github.com/PnEcrins/GeoNature-atlas/issues/167
+
+En attendant les évolution plus poussées liées à GeoNature V2, une adaptation de la vue SQL gérérant le moteur de recherche est faite :
+
+Après avoir executé `DROP MATERIALIZED VIEW atlas.vm_search_taxon;`, relancer la création de la vue avec ce code adapté :
+
+```sql
+-- Materialized View: atlas.vm_search_taxon
+
+-- DROP MATERIALIZED VIEW atlas.vm_search_taxon;
+
+CREATE MATERIALIZED VIEW atlas.vm_search_taxon AS 
+ SELECT tx.cd_nom,
+    tx.cd_ref,
+	COALESCE((tx.nom_vern::text || ' ('::text) || tx.lb_nom::text || ')'::text, tx.lb_nom::text) AS nom_search
+--	COALESCE((tx.nom_vern::text || ' (<i>'::text) || tx.lb_nom::text || '</i>)'::text, '<i>'::text || tx.lb_nom::text || '</i>'::text) AS nom_search -- version avec nom latin en italique, mais nécessite adapter les script JQuery
+   FROM atlas.vm_taxref tx
+     JOIN atlas.vm_taxons t ON t.cd_ref = tx.cd_ref
+WITH DATA;
+
+ALTER TABLE atlas.vm_search_taxon
+  OWNER TO geonatuser;
+GRANT ALL ON TABLE atlas.vm_search_taxon TO geonatuser;
+GRANT SELECT ON TABLE atlas.vm_search_taxon TO geonatatlas;
+
+-- Index: atlas.vm_search_taxon_cd_nom_idx
+
+-- DROP INDEX atlas.vm_search_taxon_cd_nom_idx;
+
+CREATE UNIQUE INDEX vm_search_taxon_cd_nom_idx
+  ON atlas.vm_search_taxon
+  USING btree
+  (cd_nom);
+
+-- Index: atlas.vm_search_taxon_cd_ref_idx
+
+-- DROP INDEX atlas.vm_search_taxon_cd_ref_idx;
+
+CREATE INDEX vm_search_taxon_cd_ref_idx
+  ON atlas.vm_search_taxon
+  USING btree
+  (cd_ref);
+
+-- Index: atlas.vm_search_taxon_nom_search_idx
+
+-- DROP INDEX atlas.vm_search_taxon_nom_search_idx;
+
+CREATE INDEX vm_search_taxon_nom_search_idx
+  ON atlas.vm_search_taxon
+  USING btree
+  (nom_search COLLATE pg_catalog."default");
+```
