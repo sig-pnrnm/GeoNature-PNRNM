@@ -227,7 +227,8 @@ RANG_STAT = [{'regne': ["Animalia"]}, {'regne': ["Plantae"]}, {'regne': ["Fungi"
 RANG_STAT_FR = ['Faune', 'Flore', 'Champignons']
 ```
 
-[![Stats 3 rangs](img/stats_3_rangs_geonature-atlas.png)
+![Stats 3 rangs](img/stats_3_rangs_geonature-atlas.png)
+
 
 - version à 4 rangs : (`Faune vertébrée, Faune invertébrée, Flore et Champignons`)
 ```shell
@@ -237,7 +238,7 @@ RANG_STAT = [{'phylum': ["Chordata"]}, {'phylum': ["Arthropoda", "Mollusca", "An
 RANG_STAT_FR = ['Faune vertébrée', 'Faune invertébrée', 'Flore', 'Champignons']
 ```
 
-[![Stats 4 rangs](img/stats_4_rangs_geonature-atlas.png)
+![Stats 4 rangs](img/stats_4_rangs_geonature-atlas.png)
 
 
 
