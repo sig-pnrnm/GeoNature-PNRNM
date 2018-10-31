@@ -260,6 +260,13 @@ Voici cette discussion sur Github : https://github.com/PnEcrins/GeoNature-atlas/
 
 En attendant les évolution plus poussées liées à GeoNature V2, une adaptation de la vue SQL gérérant le moteur de recherche est faite :
 
+Avant :
+![avant](img/recherche_busard_pnrnm_v0.png)
+Après (v1)
+![après](img/recherche_busard_pnrnm_ok.png)
+Après (v2)
+![après](img/recherche_busard_pnrnm_ok2.png)
+
 Après avoir executé `DROP MATERIALIZED VIEW atlas.vm_search_taxon;`, relancer la création de la vue avec ce code adapté :
 
 ```sql
