@@ -34,7 +34,20 @@
 		<link rel="stylesheet" href="{{url_for('static', filename='lib/leaflet/leafletMarkerCluster.Default.css') }}" />
         <script src="{{url_for('static', filename='lib/leaflet/leaflet-fullscreen/leafletFullScreen.min.js') }}"></script>
         <link rel="stylesheet" href="{{url_for('static', filename='lib/leaflet/leaflet-fullscreen/leafletFullScreen.css') }}" />
-		
+
+        <!-- Turf.js -->
+        <script src="https://unpkg.com/@turf/turf@4.4.0/turf.min.js"></script>
+
+        <!-- Toggle-Switch -->
+        <link rel="stylesheet" href="https://ghinda.net/css-toggle-switch/dist/toggle-switch.css" />
+
+        <!-- Leaflet.Control.Custom -->
+        <script src="https://yigityuce.github.io/Leaflet.Control.Custom/Leaflet.Control.Custom.js"></script>
+
+        <!-- Font-Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+
         <!-- D3 -->
         <script src="{{url_for('static', filename='lib/d3/d3.min.js') }}"></script>
         <!-- MorrisJs -->
@@ -53,16 +66,18 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/icones.css') }}" />
         <link rel="stylesheet" href="{{url_for('static', filename='custom/custom.css') }}" />
 
+        <!-- CSS PNRNM -->
+        <link rel="stylesheet" href="/pnrnm/styles/corner_ribbon.css">
 
-        <!-- Complément PNRNM -->
-        <link rel="stylesheet" href="http://149.202.129.102/pnrnm/styles/corner_ribbon.css">
     </head>
 
     <body>
-
-  <!-- Bandeaux non officiel -->
-  <div class="corner-ribbon top-right sticky red shadow">Projet non officiel</div>
     {% include 'templates/navbar.html' %}
+
+<!-- Bandeaux Serveur de tests -->
+<div class="corner-ribbon top-right sticky red shadow">Serveur de tests</div>
+<div class="corner-ribbon top-left sticky red shadow">Serveur de tests</div>
+
 	<div id="sideBar">
         {% include 'templates/sideBar.html' %}
     </div>
@@ -79,7 +94,11 @@
                             <span class="glyphicon glyphicon-search" id="zoomPhotos"> </span>
                             <a href="{{firstPhoto.path}}" data-lightbox="imageSet" data-title="{{firstPhoto.title}} &copy; {{firstPhoto.author}}">
                                 <img id="mainImg" src="{{firstPhoto.path}}" style="width:100%;" alt="{{firstPhoto.title}} &copy; {{firstPhoto.author}}">
-                                <p class="imgDescription main">{{firstPhoto.title}} &copy; {{firstPhoto.author}}</p>
+                                    {% if firstPhoto.description != '' %}
+                                                     <p class="imgDescription main">{{firstPhoto.title}} &copy; {{firstPhoto.author|striptags}}&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign" style="color:white;" data-toggle="tooltip" data-placement="top" title="{{firstPhoto.description}}"></span></p>
+                                    {% else %}
+                                                     <p class="imgDescription main">{{firstPhoto.title}} &copy; {{firstPhoto.author|striptags}} </p>
+                                    {% endif %}
                             </a>
                         </div>
 
@@ -126,6 +145,7 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
+
 						
                         {% if taxon.listTaxonsChild|length > 0 %}
                            <!-- Button trigger modal -->
@@ -250,15 +270,7 @@
                             {% else %}
                             <li class="active"><a data-toggle="tab" href="#communes"> <b>{{communes|length}}</b> communes</a></li>
                             {% endif %}
-                            
-                              <!-- Onglet observateurs >
-                            <li><a data-toggle="tab" href="#observateurs"> <b>{{observers|length}} </b> observateurs</a></li>
-                              < -->
-                              
-                              <!-- Onglet Avertissement >
-                               (vérifier pourquoi ça créé un conflit avec l'onglet #articles quand il est présent ???)
-                              < -->
-                            <li><a data-toggle="tab" href="#avertissements"><span class="glyphicon glyphicon-info-sign"> </span>&nbsp;&nbsp;Information</li>
+                            <!--<li><a data-toggle="tab" href="#observateurs"> <b>{{observers|length}} </b> observateurs</a></li>-->
                           </ul>
 
                         <div class="tab-content" style="width:100%;">
@@ -320,15 +332,7 @@
                                     {% endfor %}
                                 </p>    
                             </div>
-                             <!-- Onglet Avertissement -->
-                            <div id="avertissements" class="tab-pane fade">
-                              <div class="alert alert-warning" role="alert">
-                                Ces données, non validées, sont issues du travail d'inventaire réalisé par le Parc naturel régional Normandie-Maine 
-                                en partenariat avec les associations naturalistes du territoire 
-                                (Association Faune et Flore de l'Orne, ...) et des contributeurs individuels.
-                              </div>
-                            </div>
-                             <!-- Onglet Observateurs -->
+                           <!-- 
                             <div id="observateurs" class="tab-pane fade">
                                 {% for o in observers %}
                                     {{o }}
@@ -336,7 +340,8 @@
                                     -
                                     {% endif %}
                                 {% endfor %}
-                            </div>                              
+                            </div>
+                            -->
                         </div>
                 </div>
             </div>
@@ -372,7 +377,15 @@
                                 <a href="{{photo.path}}" data-lightbox="imageSet" data-title="{{photo.title}}  &copy; {{photo.author}}" >
                                   <div class="slider-size" style="background-image: url({{photo.path}})" alt="{{photo.title}} &copy; {{photo.author}}">
                                       <div class="carousel-caption">
-                                        {{photo.title}} &copy; {{photo.author}} 
+                                      {% if photo.description != '' %}
+                                            {{photo.title}} &copy; {{photo.author}}
+                                            &nbsp;&nbsp;
+                                            <span class="glyphicon glyphicon-info-sign" style="color:white;" data-toggle="tooltip" data-placement="top"
+                                            title="{{photo.description}}">
+                                            </span>
+                                      {% else %}
+                                            {{photo.title}} &copy; {{photo.author}}
+                                      {% endif %}
                                       </div>
                                   </div>
                                 </a>
@@ -402,11 +415,11 @@
                     {% if taxonDescription.commentaire != None %}
                     <li><a data-toggle="tab" href="#commentaire">En savoir plus</a></li>
                     {% endif %}
+                    {% if taxonDescription.milieu != None %}
                     <li><a data-toggle="tab" href="#milieu">Milieu</a></li>
-                    <li><a data-toggle="tab" href="#chorologie">Répartition</a></li>
-					<!--  Menu Synonyme non affiché
-                    <li><a data-toggle="tab" href="#synonymes">Synonymes</a></li>
-					-->
+                    {% endif %}
+                    <li><a data-toggle="tab" href="#statuts">Statuts de protection</a></li>
+                    <li><a data-toggle="tab" href="#autresinfos">Autres informations</a></li>
                 </ul>
                     
                 <div class="tab-content">
@@ -422,75 +435,55 @@
                                 {{taxonDescription.commentaire  | safe}}     
                         </div>
                         {% endif %}
+                        {% if taxonDescription.milieu == None %}
+                        {% else %}
                         <div id="milieu" class="tab-pane fade">
-                                {% if taxonDescription.milieu == None %}
-                                    Non renseigné pour le moment
-                                {% else %}
                                 {{taxonDescription.milieu}}
-                                {% endif %}
                         </div>  
-                        <div id="chorologie" class="tab-pane fade">                                
+                        {% endif %}
+						
+                        <div id="statuts" class="tab-pane fade">
+						
+						
+                            <h3>
+                            {% if taxon.taxonSearch.protection == 'oui' %}
+                                <a href="https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}/tab/statut" target="_blank">
+                                    <img class="caractEspece" width="130px" src="{{url_for('static', filename='images/logo_protection.png') }}"  data-toggle="tooltip" data-original-title="Ce taxon bénéficie d'un statut de protection" data-placement="right"></a>
+                            {% endif %}
+                            {% if taxon.taxonSearch.patrimonial == 'oui' %}
+                                <img class="caractEspece" width="130px" src="{{url_for('static', filename='custom/images/logo_patrimonial.png') }}"  data-toggle="tooltip" data-original-title="Ce taxon est patrimonial pour le {{configuration.STRUCTURE}}" data-placement="right">
+                            {% endif %}
+                            </h3>
+							<p>
+								<a href="https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}/tab/statut" target="_blank">"Fiche Statuts" sur le site INPN</a>
+							</p>
+                        </div>
+						
+                        <div id="autresinfos" class="tab-pane fade">                                
                                 {% if taxonDescription.chorologie == None %}
                                 {% else %}
+									<h4>Chorologie locale :</h4>
                                     {{taxonDescription.chorologie}}
                                 {% endif %}
 								<br>
-
-								<table style="text-align: center; width:100%; ">
-								  <tbody>
-									<tr>
-									  <td><h4 class="text-center">Normandie</h4></td>
-									  <td><h4 class="text-center">Pays-de-la-Loire</h4></td>
-									</tr>
-									<tr>
-									  <td>
-										<a class="btn btn-lg px-3 btn-default" href="https://odin.normandie.fr/odin/#/taxonomy/view?taxonID={{taxon.taxonSearch.cd_ref}}" role="button" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur ODIN" data-placement="bottom">ODIN <img src="https://odin.normandie.fr/odin/img/odin_logo.png" height="30" alt="ODIN">
-										</a>
-									  </td>
-									  <td>
-										<a class="btn btn-lg px-3 btn-default" href="http://79.137.82.197/espece/{{taxon.taxonSearch.cd_ref}}" role="button" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur Biodiv'Pays-de-la-Loire" data-placement="bottom">Biodiv'PDL <img src="http://79.137.82.197/static/custom/images/logo-structure.png" height="30" alt="Biodiv'PDL">
-										</a>
-									  </td>
-									</tr>
-								  </tbody>
-								</table>
 								
-								<div class="panel-body">
-								   
-									<h4 class="text-center">France métropolitaine</h4>
-
-										<div id="inpnLink">
-										
-											<a class="btn btn-lg px-3 btn-default" href="https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}" role="button" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur l'INPN" data-placement="bottom"><img src="{{url_for('static', filename='images/logo_inpn.png') }}" height="30" alt="INPN">
-											</a>
-										
-										</div>
-							   
-										<object data="https://inpn.mnhn.fr/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93" type="image/svg+xml" width="90%" height="90%">
-											<param name="src" value="/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93">
-											<param name="type" value="image/svg+xml">
-											<param name="pluginspage" value="http://www.adobe.com/svg/viewer/install/">
-										</object>
-										<p class="small text-justify" style="color:#b1b1b1;">Cartographie issue de l'<a href='https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}' target="_blank" style="color:#7785ce;">INPN</a> - Avertissement : les données visualisables reflètent l'état d'avancement des connaissances et/ou la disponibilité des données existantes au niveau national : elles ne peuvent en aucun cas être considérées comme exhaustives.</p>
-
-								 </div>
+								<div id="synonymes">
+									{% if synonyme | length == 1 %}
+									{% else %}
+										<h4>Synonymes : </h4>
+										{% for syn in synonyme %} 
+											{% if not syn.lb_nom == taxon.taxonSearch.lb_nom %}
+											{{ syn.nom_complet_html | safe}}
+											{% endif %}
+											{% if ( (not loop.last) and (not syn.lb_nom == taxon.taxonSearch.lb_nom) ) %}
+											|
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+								</div>
+								
+								
                         </div>
-						<!--  Menu Synonyme non affiché
-                        <div id="synonymes" class="tab-pane fade">
-                            {% if synonyme | length == 1 %}
-                                Aucun synonyme pour ce taxon
-                            {% else %}
-                                {% for syn in synonyme %} 
-                                    {% if not syn.lb_nom == taxon.taxonSearch.lb_nom %}
-                                    {{ syn.nom_complet_html | safe}}
-                                    {% endif %}
-                                    {% if ( (not loop.last) and (not syn.lb_nom == taxon.taxonSearch.lb_nom) ) %}
-                                    |
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-						-->
                 </div>
             </div>
 			
@@ -557,9 +550,80 @@
             </div>
             {% endif %}
 
+			
+			<!-- Bloc Portails régionaux ODIN et Biodiv'PDL -->
+            <div class="panel panel-default">
+                <div class="row">
+                    <div class="col-sm-12">
+                        
+						<div class="tab-pane fade in active">
+							
+							<h4 class="text-center">Liens vers les portails régionaux et nationaux</h4>
+							
+							<div class="row">
+								<div class="col-md-4"><h4 class="text-center">Normandie</h4></div>
+								<div class="col-md-4"><h4 class="text-center">Pays-de-la-Loire</h4></div>
+								<div class="col-md-4"><h4 class="text-center">France</h4></div>
+							</div>
+							
+							<div class="row text-center">
+								
+								<div class="col-md-4">
+									<a class="btn btn-lg px-3 btn-default" href="https://odin.normandie.fr/odin/#/taxonomy/view?taxonID={{taxon.taxonSearch.cd_ref}}" role="button" target="_blank" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur ODIN" data-placement="bottom">ODIN <img src="https://odin.normandie.fr/odin/img/odin_logo.png" height="30" alt="ODIN">
+									</a>
+								</div>
+								
+								<div class="col-md-4">
+									<a class="btn btn-lg px-3 btn-default" href="http://biodiv-paysdelaloire.fr/espece/{{taxon.taxonSearch.cd_ref}}" role="button" target="_blank" data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur Biodiv'Pays-de-la-Loire" data-placement="bottom">Biodiv'PDL <img src="http://biodiv-paysdelaloire.fr/static/custom/images/logo-structure.png" height="30" alt="Biodiv'PDL">
+									</a>
+								</div>
+								
+								<div class="col-md-4">
+									<a class="btn btn-lg px-3 btn-default" href='https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}' role="button" target="_blank"> 
+										<img width="130px" src="{{url_for('static', filename='images/logo_inpn.png') }}"  data-toggle="tooltip" data-original-title="Consultez la fiche espèce sur l'INPN" data-placement="bottom">
+									</a>
+								</div>
+							</div>
+							
+                        </div>
+ 
+                    </div>
+                </div>
+            </div>
+			
+			<!-- Bloc carte France métropolitaine (source : Biodiv'PDL) -->
+            <div class="panel panel-default">
+                <div class="row">
+                    <div class="col-sm-12">
+ 
+						<!-- Carte nationale SINP -->
+                        <div id="chorologie" class="tab-pane fade in active">
+
+                            <div class="panel-body">
+                               
+                                <h4 class="text-center">Carte de répartition actuelle en France métropolitaine</h4>
+                                                                           
+                                    <object data="https://inpn.mnhn.fr/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93" type="image/svg+xml" width="90%" height="90%">
+                                        <param name="src" value="/cartosvg/couchegeo/repartition/atlas/{{taxon.taxonSearch.cd_ref}}/fr_light_l93,fr_light_mer_l93,fr_lit_l93">
+                                        <param name="type" value="image/svg+xml">
+                                        <param name="pluginspage" value="http://www.adobe.com/svg/viewer/install/">
+                                    </object>
+                                    <p class="small text-justify" style="color:#b1b1b1;">Cartographie issue de l'<a href='https://inpn.mnhn.fr/espece/cd_nom/{{taxon.taxonSearch.cd_ref}}' target="_blank" style="color:#7785ce;">INPN</a> - Avertissement : les données visualisables reflètent l'état d'avancement des connaissances et/ou la disponibilité des données existantes au niveau national : elles ne peuvent en aucun cas être considérées comme exhaustives.</p>
+
+                             </div>
+                        </div>
+ 
+                    </div>
+                </div>
+            </div>
+			
+			
+			
             <div class="panel panel-default" id="graphBloc">
-                <h3 class="text-center">Observations par classes d'altitudes</h3>
-                <div id="altiChart"></div>
+				<!-- Graphe Alti non affiché avec style="display: none;" -->
+                <h3 class="text-center" style="display: none;">Observations par classes d'altitudes</h3>
+                <div id="altiChart" style="display: none;"></div>
+				<!-- Graphe Phénologique -->
                 <h3 class="text-center">Observations mensuelles</h3>
                 <div id="phenologyChart"></div>
             </div>
@@ -591,12 +655,17 @@
 
     <script src="{{url_for('static', filename='mapGenerator.js') }}"></script>
     <script src="{{url_for('static', filename='main.js') }}"></script>
-    {% if configuration.AFFICHAGE_MAILLE %}
-        <script src="{{url_for('static', filename='mapMailles.js') }}"></script>
-    {% else %}
+    {% if configuration.AFFICHAGE_SWITCHER == 1 and configuration.AFFICHAGE_ATLAS_POINT %}
         <script src="{{url_for('static', filename='mapPoint.js') }}"></script>
-    {% endif %}
-    <script src="{{url_for('static', filename='ficheEspece.js') }}"></script>
+    {% elif configuration.AFFICHAGE_SWITCHER == 1 and configuration.AFFICHAGE_ATLAS_MAILLE_CARREE %}
+        <script src="{{url_for('static', filename='mapMailles.js') }}"></script>
+    {% elif configuration.AFFICHAGE_SWITCHER == 1 and configuration.AFFICHAGE_ATLAS_MAILLE_COMMUNALE %}
+        <script src="{{url_for('static', filename='mapMaillesCommunales.js') }}"></script>
+    {% elif configuration.AFFICHAGE_SWITCHER  > 1 %}
+        <script src="{{url_for('static', filename='mapSwitcher.js') }}"></script>
+    {% else %}
+
+{% endif %}
 
     </body>
 </html>
