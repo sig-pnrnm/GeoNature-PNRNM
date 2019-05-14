@@ -85,71 +85,11 @@ https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#req
 ```
 > peut-être résolu ? (à vérifier)
 
-> erreur (mai)
-(en cours d'execution)
+
+> si tout va bien :
 ```
-Installing "cordova-plugin-compat" for android
-Plugin doesn't support this project's cordova-android version. cordova-android:
-6.4.0, failed version requirement:
-      <6.3.0
-Skipping 'cordova-plugin-compat' for android
-```
-
-(au final)
-```
-BUILD SUCCESSFUL in 9s
-1 actionable task: 1 executed
-Subproject Path: CordovaLib
-Starting a Gradle Daemon, 1 incompatible and 1 stopped Daemons could not be reus
-ed, use --status for details
-The Task.leftShift(Closure) method has been deprecated and is scheduled to be re
-moved in Gradle 5.0. Please use Task.doLast(Action) instead.
-        at build_64w8y75zi1vhffm6ihvwftlrx.run(C:\mission_nature\Mission-Nature-
-mobile-master\platforms\android\build.gradle:141)
-Configuration 'compile' in project ':' is deprecated. Use 'implementation' inste
-ad.
-File C:\Users\Sylvain\.android\repositories.cfg could not be loaded.
-Checking the license for package Android SDK Platform 26 in C:\Users\Sylvain\App
-Data\Local\Android\Sdk\licenses
-Warning: License for package Android SDK Platform 26 not accepted.
-
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-A problem occurred configuring root project 'android'.
-> You have not accepted the license agreements of the following SDK components:
-  [Android SDK Platform 26].
-  Before building your project, you need to accept the license agreements and co
-mplete the installation of the missing components using the Android Studio SDK M
-anager.
-  Alternatively, to learn how to transfer the license agreements from one workst
-ation to another, go to http://d.android.com/r/studio-ui/export-licenses.html
-
-* Try:
-Run with --stacktrace option to get the stack trace. Run with --info or --debug
-option to get more log output.
-
-* Get more help at https://help.gradle.org
-
-BUILD FAILED in 15s
-cmd: Command failed with exit code 1 Error output:
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-A problem occurred configuring root project 'android'.
-> You have not accepted the license agreements of the following SDK components:
-  [Android SDK Platform 26].
-  Before building your project, you need to accept the license agreements and co
-mplete the installation of the missing components using the Android Studio SDK M
-anager.
-  Alternatively, to learn how to transfer the license agreements from one workst
-ation to another, go to http://d.android.com/r/studio-ui/export-licenses.html
-
-* Try:
-Run with --stacktrace option to get the stack trace. Run with --info or --debug
-option to get more log output.
-
-* Get more help at https://help.gradle.org
-
-BUILD FAILED in 15s
+BUILD SUCCESSFUL in 1m 28s
+44 actionable tasks: 44 executed
+Built the following apk(s):
+        C:/mission_nature/Mission-Nature-mobile-master/platforms/android/build/outputs/apk/debug/android-debug.apk
 ```
