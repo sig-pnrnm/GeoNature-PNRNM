@@ -36,8 +36,9 @@ NB. : messages erreurs : `PHP Notice:  Undefined offset: 1 in /home/mission/Miss
 
 `cd /home/mission/Mission-Nature-scripts/mission_taxon/taxon/photos`
 `mogrify -path ../thumbs -thumbnail 256x256^ -gravity center -extent 256x256 *.jpg`
+`mogrify -path ../poster/ -resize 900x900 *.jpg`
 
-*manque celui des grandes photos !* (à récupérer)
+* /!\ nb : incohérence avec les répertoires de l'appli : /thumbs et /poster et non /photos_thumb et /photos_full*
 
 
 ## 3. Compilation de l'appli avec CORDOVA
@@ -55,12 +56,22 @@ https://github.com/NaturalSolutions/Mission-Nature-mobile
 
 - executer ces commandes :
 
-`npm install`
+`npm install` (execution : 13s)
+
 `cordova platform add android`
 
 (très long)
 
-Adapter `www\modules\main\config.js.tpl` en `config.js` avec :
+erreur (nouvelle depuis bascule sur C:) :
+```
+>> Error: Cannot find module '../main/config' from 'C:\mission_nature\Mission-Nature-mobile-master\www\modules\profile'
+Warning: Error running grunt-browserify. Use --force to continue.
+
+Aborted due to warnings.
+```
+
+
+- Adapter `www\modules\main\config.js.tpl` en `config.js` avec :
 
 coreUrl: `http://149.202.129.99/mission_nature`,
 
