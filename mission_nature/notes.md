@@ -13,8 +13,9 @@ en complément notamment de https://github.com/NaturalSolutions/Mission-Nature-s
 
 - mettre les CSV `missions.csv` et `taxons.csv` dans `/home/mission/Mission-Nature-scripts` via WinSCP
 
+<span style="color:red">
 (question : et pour les CSV `cities.csv` et `credits_photos.csv` ?)
-
+</span>
 
 - en ligne de commande (putty), se placer dans ce dossier :
 
@@ -24,9 +25,10 @@ en complément notamment de https://github.com/NaturalSolutions/Mission-Nature-s
 
 `php ./mission_tojson.php`
 
+<span style="color:red">
 NB. : messages erreurs : `PHP Notice:  Undefined offset: 1 in /home/mission/Mission-Nature-scripts/mission_tojson.php on line 15`
 (ignorer : lié à une ligne vide ??)
-
+</span>
 
 
 ## 2. Redimensionner les photos pour les dossier thumb et full
@@ -38,8 +40,9 @@ NB. : messages erreurs : `PHP Notice:  Undefined offset: 1 in /home/mission/Miss
 `cd /home/mission/Mission-Nature-scripts/mission_taxon/taxon/photos`
 `mogrify -path ../thumbs -thumbnail 256x256^ -gravity center -extent 256x256 *.jpg`
 
+<span style="color:red">
 *manque celui des grandes photos !* (à récupérer)
-
+</span>
 
 
 ## 3. Compilation de l'appli avec CORDOVA
