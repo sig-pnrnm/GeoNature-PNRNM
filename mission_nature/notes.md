@@ -1,13 +1,15 @@
-## Pense bête pour la compilation de l'application Mission Nature
+# Pense bête pour la compilation de l'application Mission Nature
+
 
 https://github.com/NaturalSolutions/Mission-Nature-mobile
+
 https://github.com/NaturalSolutions/Mission-Nature-scripts
 
 en complément notamment de https://github.com/NaturalSolutions/Mission-Nature-scripts/blob/master/mission_manual.rst
 
 
 
-# 1. Générer les fichiers JSON d'après les CSV
+## 1. Générer les fichiers JSON d'après les CSV
 
 - mettre les CSV dans `/home/mission/Mission-Nature-scripts` via WinSCP
 
@@ -26,7 +28,7 @@ NB. : message erreur
 (ignorer : lié à une ligne vide ??)
 
 
-# 2. Redimensionner les photos pour les dossier thumb et full
+## 2. Redimensionner les photos pour les dossier thumb et full
 
 - mettre les photos dans le dossier `Mission-Nature-scripts/photos` (via WinScp)
 
@@ -39,7 +41,7 @@ NB. : message erreur
 
 
 
-# 3. Compilation de l'appli avec CORDOVA
+## 3. Compilation de l'appli avec CORDOVA
 
 - télécharger en local (sur `C:\ ` ) l'application sur Github :
 https://github.com/NaturalSolutions/Mission-Nature-mobile
