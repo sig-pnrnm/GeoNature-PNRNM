@@ -1,14 +1,26 @@
+## Pense bête pour la compilation de l'application Mission Nature
+
+https://github.com/NaturalSolutions/Mission-Nature-mobile
+https://github.com/NaturalSolutions/Mission-Nature-scripts
+
+en complément notamment de https://github.com/NaturalSolutions/Mission-Nature-scripts/blob/master/mission_manual.rst
+
+
+
 # 1. Générer les fichiers JSON d'après les CSV
 
 - mettre les CSV dans `/home/mission/Mission-Nature-scripts` via WinSCP
 
 - en ligne de commande (putty), se placer dans ce dossier :
+
 `cd /home/mission/Mission-Nature-scripts`
 
 - executer la commande :
+
 `php ./mission_tojson.php`
 
 NB. : message erreur
+
 `PHP Notice:  Undefined offset: 1 in /home/mission/Mission-Nature-scripts/mission                      _tojson.php on line 15`
 
 (ignorer : lié à une ligne vide ??)
@@ -19,6 +31,7 @@ NB. : message erreur
 - mettre les photos dans le dossier `Mission-Nature-scripts/photos` (via WinScp)
 
 - lancer les commandes (putty) mogrify depuis ce dossier :
+
 `cd /home/mission/Mission-Nature-scripts/photos`
 `mogrify -path ../photos_thumb/ -thumbnail 256x256^ -gravity center -extent 256x256 *.jpg`
 
@@ -34,6 +47,7 @@ https://github.com/NaturalSolutions/Mission-Nature-mobile
 - mettre les photos (poster + thumbs) dans les dossiers `www/images/mission_taxons` et dans `www/data/image_source` (via WinSCP)
 
 - avec CMD, se placer dans le dossier où a été téléchargée l'app :
+
 `cd C:\mission_nature\Mission-Nature-mobile-master`
 
 - executer ces commandes :
