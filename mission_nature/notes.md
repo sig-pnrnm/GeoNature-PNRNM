@@ -11,7 +11,10 @@ en complément notamment de https://github.com/NaturalSolutions/Mission-Nature-s
 
 ## 1. Générer les fichiers JSON d'après les CSV
 
-- mettre les CSV dans `/home/mission/Mission-Nature-scripts` via WinSCP
+- mettre les CSV `missions.csv` et `taxons.csv` dans `/home/mission/Mission-Nature-scripts` via WinSCP
+
+(question : et pour les CSV `cities.csv` et `credits_photos.csv` ?)
+
 
 - en ligne de commande (putty), se placer dans ce dossier :
 
@@ -21,32 +24,32 @@ en complément notamment de https://github.com/NaturalSolutions/Mission-Nature-s
 
 `php ./mission_tojson.php`
 
-NB. : message erreur
-
-`PHP Notice:  Undefined offset: 1 in /home/mission/Mission-Nature-scripts/mission                      _tojson.php on line 15`
-
+NB. : messages erreurs : `PHP Notice:  Undefined offset: 1 in /home/mission/Mission-Nature-scripts/mission_tojson.php on line 15`
 (ignorer : lié à une ligne vide ??)
+
 
 
 ## 2. Redimensionner les photos pour les dossier thumb et full
 
-- mettre les photos dans le dossier `Mission-Nature-scripts/photos` (via WinScp)
+- mettre les photos dans les dossiers `photos` du répertoire `Mission-Nature-scripts/mission_taxon/` (via WinScp)
 
-- lancer les commandes (putty) mogrify depuis ce dossier :
+- lancer les commandes (putty) mogrify depuis les dossiers `photos` (pour taxons et missions) :
 
-`cd /home/mission/Mission-Nature-scripts/photos`
-`mogrify -path ../photos_thumb/ -thumbnail 256x256^ -gravity center -extent 256x256 *.jpg`
+`cd /home/mission/Mission-Nature-scripts/mission_taxon/taxon/photos`
+`mogrify -path ../thumbs -thumbnail 256x256^ -gravity center -extent 256x256 *.jpg`
 
-(manque celui des grandes photos)
+*manque celui des grandes photos !* (à récupérer)
 
 
 
 ## 3. Compilation de l'appli avec CORDOVA
 
-- télécharger en local (sur `C:\ ` ) l'application sur Github :
+- télécharger en local (sur `C:\mission_nature` ) l'application sur Github :
 https://github.com/NaturalSolutions/Mission-Nature-mobile
 
-- mettre les photos (poster + thumbs) dans les dossiers `www/images/mission_taxons` et dans `www/data/image_source` (via WinSCP)
+- mettre les photos en local depuis le serveur Mission Nature (poster + thumbs) dans les dossiers `www/images/mission_taxons` et dans `www/data/image_source` (via WinSCP)
+
+- (question : ne devrait-on pas mettre aussi le fichier `missions.json`)
 
 - avec CMD, se placer dans le dossier où a été téléchargée l'app :
 
