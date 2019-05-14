@@ -61,7 +61,6 @@ https://github.com/NaturalSolutions/Mission-Nature-mobile
   coreUrl: 'http://149.202.129.99/mission_nature',
   apiUrl: 'http://149.202.129.99/mission_nature/obfmobileapi',
 ```
-https://github.com/PnEcrins/GeoNature-atlas/tree/master/static/images
 
 - avec CMD, se placer dans le dossier où a été téléchargée l'app :
 
